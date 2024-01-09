@@ -5,6 +5,7 @@ import 'dart:convert';
 import 'package:flemoo_app/Account/accounts.dart';
 import 'package:flemoo_app/Authentication/login_page.dart';
 import 'package:flemoo_app/Devices/map_devices.dart';
+import 'package:flemoo_app/Location/geofence.dart';
 import 'package:flemoo_app/Location/history_gps.dart';
 import 'package:flemoo_app/Location/live_location.dart';
 import 'package:flemoo_app/Location/set_geofence.dart';
@@ -402,20 +403,23 @@ class _MyHomePageState extends State<MyHomePage> {
                     onTap: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => Overview()),
+                        MaterialPageRoute(builder: (context) => Geofence()),
                       );
                     },
                     child: Container(
-                        height: MediaQuery.of(context).size.height * 5 / 42,
-                        width: MediaQuery.of(context).size.width * 0.3,
-                        decoration: BoxDecoration(),
-                        child: Column(
-                          children: [
-                            Image(
-                              image: AssetImage('images/fleemoo.png'),
-                            ),
-                          ],
-                        )),
+                      height: MediaQuery.of(context).size.height * 5 / 42,
+                      width: MediaQuery.of(context).size.width * 0.3,
+                      decoration: BoxDecoration(),
+                      child: Column(
+                        children: [
+                          Icon(
+                            Icons.language,
+                            color: mainColor,
+                          ),
+                          Text('View Geofences'),
+                        ],
+                      ),
+                    ),
                   ),
                   Container(
                     height: MediaQuery.of(context).size.height * 5 / 42,

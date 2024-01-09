@@ -2,6 +2,7 @@
 
 import 'dart:convert';
 import 'package:flemoo_app/Edit/edit_device.dart';
+import 'package:flemoo_app/Location/geofence.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:http/http.dart' as http;
@@ -24,14 +25,12 @@ class _DrawGeofenceState extends State<DrawGeofence> {
   MapController mapController = MapController();
 
   /// API PARAMETERS
-  String devicesURL = "https://devfleemooservice.trackafrik.com/api/devices";
-  String positionURL(int id) {
-    return "https://devfleemooservice.trackafrik.com/api/positions?id=$id";
-  }
-
+  String geofenceURL = "https://devfleemooservice.trackafrik.com/api/geofences";
   var usernameAuth = 'admin';
   var passwordAuth = 'AdminFleemoo1234';
   String basicAuth = '';
+
+  double geofenceWidth = 0;
 
   /// MAP WIDGET
   Widget displayMap() {
@@ -44,7 +43,7 @@ class _DrawGeofenceState extends State<DrawGeofence> {
               options: MapOptions(
                 initialCenter:
                     LatLng(widget.coordinates[0], widget.coordinates[1]),
-                initialZoom: 5,
+                initialZoom: 15,
               ),
               children: [
                 TileLayer(
@@ -65,7 +64,19 @@ class _DrawGeofenceState extends State<DrawGeofence> {
                       ),
                     ),
                   ],
-                )
+                ),
+                CircleLayer(
+                  circles: [
+                    CircleMarker(
+                      point:
+                          LatLng(widget.coordinates[0], widget.coordinates[1]),
+                      color: Colors.blue.withOpacity(0.3),
+                      borderColor: Colors.blue,
+                      borderStrokeWidth: 2,
+                      radius: geofenceWidth,
+                    ),
+                  ],
+                ),
               ],
             )),
         Positioned(
@@ -107,7 +118,54 @@ class _DrawGeofenceState extends State<DrawGeofence> {
                 ],
               ),
             )),
-            Positioned(child: )
+        Positioned(
+          child: Container(
+            height: MediaQuery.of(context).size.height * 0.06,
+            width: MediaQuery.of(context).size.width * 0.9,
+            margin: EdgeInsets.only(
+                right: MediaQuery.of(context).size.width * 0.05,
+                left: MediaQuery.of(context).size.width * 0.05),
+            decoration: BoxDecoration(
+              color: Colors.transparent,
+            ),
+            child: Slider(
+              value: geofenceWidth,
+              min: 0,
+              max: 300,
+              divisions: 300,
+              activeColor: mainColor,
+              inactiveColor: Color.fromARGB(255, 164, 214, 255),
+              thumbColor: mainColor,
+              onChanged: (double value) {
+                setState(() {
+                  geofenceWidth = value;
+                  print(geofenceWidth);
+                });
+              },
+            ),
+          ),
+        ),
+        Positioned(
+            bottom: 15,
+            child: Container(
+              height: MediaQuery.of(context).size.height * 0.06,
+              width: MediaQuery.of(context).size.width * 0.5,
+              margin: EdgeInsets.only(
+                  left: MediaQuery.of(context).size.width * 0.25,
+                  right: MediaQuery.of(context).size.width * 0.25),
+              decoration: BoxDecoration(color: Colors.transparent),
+              child: ElevatedButton(
+                  onPressed: () {
+                    addNewGeofence();
+                  },
+                  style: ElevatedButton.styleFrom(
+                      backgroundColor: mainColor,
+                      foregroundColor: Colors.white),
+                  child: Text(
+                    "DONE",
+                    style: TextStyle(fontWeight: FontWeight.w400, fontSize: 13),
+                  )),
+            ))
       ],
     );
   }
@@ -150,5 +208,27 @@ class _DrawGeofenceState extends State<DrawGeofence> {
       ),
       body: displayMap(),
     );
+  }
+
+  Future<void> addNewGeofence() async {
+    final apiURL = Uri.parse(geofenceURL);
+    basicAuth =
+        'Basic ${base64Encode(utf8.encode('$usernameAuth:$passwordAuth'))}';
+    try {
+      final response = await http.post(apiURL, headers: <String, String>{
+        'authorization': basicAuth
+      }, body: {
+        'name': "Office Area",
+        'password': "This is the area of my office",
+      });
+      if (response.statusCode == 200) {
+        print("Adding geofence was successfull${response.statusCode}");
+      } else {
+        print("Adding geofence was not successfull${response.statusCode}");
+        print(response.body);
+      }
+    } catch (e) {
+      print(e);
+    }
   }
 }

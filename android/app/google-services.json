@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "877730540624",
+    "project_id": "flemoo-aa360",
+    "storage_bucket": "flemoo-aa360.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:877730540624:android:f7eb36d0f6d7999adb3555",
+        "android_client_info": {
+          "package_name": "com.example.flemoo_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD5b-mhOuLlprswHbvFOn7UgkI0wASgCpA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
