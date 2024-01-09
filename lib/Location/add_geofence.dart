@@ -2,6 +2,7 @@
 
 import 'dart:convert';
 import 'package:flemoo_app/Edit/edit_device.dart';
+import 'package:flemoo_app/Location/add_geofence_details.dart';
 import 'package:flemoo_app/Location/geofence.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
@@ -154,17 +155,26 @@ class _DrawGeofenceState extends State<DrawGeofence> {
                   left: MediaQuery.of(context).size.width * 0.25,
                   right: MediaQuery.of(context).size.width * 0.25),
               decoration: BoxDecoration(color: Colors.transparent),
-              child: ElevatedButton(
-                  onPressed: () {
-                    addNewGeofence();
-                  },
-                  style: ElevatedButton.styleFrom(
-                      backgroundColor: mainColor,
-                      foregroundColor: Colors.white),
-                  child: Text(
-                    "DONE",
-                    style: TextStyle(fontWeight: FontWeight.w400, fontSize: 13),
-                  )),
+              child: Container(
+                height: MediaQuery.of(context).size.height * 0.05,
+                width: MediaQuery.of(context).size.width * 0.3,
+                decoration: BoxDecoration(color: Colors.transparent),
+                child: ElevatedButton(
+                    onPressed: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: ((context) => AddGeofenceDetails())));
+                    },
+                    style: ElevatedButton.styleFrom(
+                        backgroundColor: mainColor,
+                        foregroundColor: Colors.white),
+                    child: Text(
+                      "SAVE",
+                      style:
+                          TextStyle(fontWeight: FontWeight.w400, fontSize: 13),
+                    )),
+              ),
             ))
       ],
     );
@@ -210,16 +220,22 @@ class _DrawGeofenceState extends State<DrawGeofence> {
     );
   }
 
-  Future<void> addNewGeofence() async {
+  Future<void> addNewGeofence(
+      String geofenceName, String geofenceDescription) async {
     final apiURL = Uri.parse(geofenceURL);
     basicAuth =
         'Basic ${base64Encode(utf8.encode('$usernameAuth:$passwordAuth'))}';
     try {
       final response = await http.post(apiURL, headers: <String, String>{
-        'authorization': basicAuth
+        'authorization': basicAuth,
+        'Content-Type': 'application/json'
       }, body: {
-        'name': "Office Area",
-        'password': "This is the area of my office",
+        "attributes": {},
+        "calendarId": 1,
+        "name": geofenceName,
+        "description": geofenceDescription,
+        "area":
+            "POLYGON((50.23333354825988 8.630563964241324, 50.22985037808232 8.606294260396464, 50.21636313400313 8.602093740095075, 50.209845792910556 8.653507178533214, 50.220107459680634 8.657471170141823, 50.2256204731776 8.643321109642851, 50.23333354825988 8.630563964241324))"
       });
       if (response.statusCode == 200) {
         print("Adding geofence was successfull${response.statusCode}");
