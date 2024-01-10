@@ -219,32 +219,4 @@ class _DrawGeofenceState extends State<DrawGeofence> {
       body: displayMap(),
     );
   }
-
-  Future<void> addNewGeofence(
-      String geofenceName, String geofenceDescription) async {
-    final apiURL = Uri.parse(geofenceURL);
-    basicAuth =
-        'Basic ${base64Encode(utf8.encode('$usernameAuth:$passwordAuth'))}';
-    try {
-      final response = await http.post(apiURL, headers: <String, String>{
-        'authorization': basicAuth,
-        'Content-Type': 'application/json'
-      }, body: {
-        "attributes": {},
-        "calendarId": 1,
-        "name": geofenceName,
-        "description": geofenceDescription,
-        "area":
-            "POLYGON((50.23333354825988 8.630563964241324, 50.22985037808232 8.606294260396464, 50.21636313400313 8.602093740095075, 50.209845792910556 8.653507178533214, 50.220107459680634 8.657471170141823, 50.2256204731776 8.643321109642851, 50.23333354825988 8.630563964241324))"
-      });
-      if (response.statusCode == 200) {
-        print("Adding geofence was successfull${response.statusCode}");
-      } else {
-        print("Adding geofence was not successfull${response.statusCode}");
-        print(response.body);
-      }
-    } catch (e) {
-      print(e);
-    }
-  }
 }
