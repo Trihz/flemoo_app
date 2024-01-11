@@ -23,6 +23,7 @@ class _SetGeofence extends State<SetGeofence> {
 
   /// API PARAMETERS
   String devicesURL = "https://devfleemooservice.trackafrik.com/api/devices";
+  String geofenceURL = "https://devfleemooservice.trackafrik.com/api/geofences";
   String positionURL(int id) {
     return "https://devfleemooservice.trackafrik.com/api/positions?id=$id";
   }

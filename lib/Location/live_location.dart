@@ -37,6 +37,8 @@ class _LiveLocationState extends State<LiveLocation> {
   List<Map<String, dynamic>> allDevices = [];
   String deviceSpeed = "";
   String deviceTime = "";
+  String deviceAddress = "";
+  String deviceDistance = "";
 
   /// POSITION PARAMETERS
   double device_latitude = 0;
@@ -78,13 +80,11 @@ class _LiveLocationState extends State<LiveLocation> {
               ],
             )),
         Positioned(
-            top: 15,
-            left: 10,
-            right: 10,
+            top: 0,
             child: DropdownButtonHideUnderline(
               child: Container(
                 height: MediaQuery.of(context).size.height * 0.06,
-                width: MediaQuery.of(context).size.width * 0.7,
+                width: MediaQuery.of(context).size.width * 1,
                 padding: const EdgeInsets.only(left: 10, right: 10),
                 decoration: BoxDecoration(
                   color: Colors.white,
@@ -127,7 +127,48 @@ class _LiveLocationState extends State<LiveLocation> {
               ),
             )),
         Positioned(
-            bottom: 20,
+            top: MediaQuery.of(context).size.height * 0.08,
+            left: MediaQuery.of(context).size.width * 0.2,
+            right: MediaQuery.of(context).size.width * 0.2,
+            child: DropdownButtonHideUnderline(
+              child: Container(
+                height: MediaQuery.of(context).size.height * 0.04,
+                width: MediaQuery.of(context).size.width * 0.6,
+                padding: const EdgeInsets.only(left: 10, right: 10),
+                decoration: BoxDecoration(
+                  color: Colors.white60,
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey.withOpacity(0.3),
+                      offset: const Offset(0, 2),
+                      blurRadius: 3,
+                      spreadRadius: 1,
+                    ),
+                  ],
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    Text(
+                      "Distance: ",
+                      style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 16,
+                          fontWeight: FontWeight.w400),
+                    ),
+                    Text(
+                      deviceDistance,
+                      style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 16,
+                          fontWeight: FontWeight.w400),
+                    ),
+                  ],
+                ),
+              ),
+            )),
+        Positioned(
+            bottom: MediaQuery.of(context).size.height * 0.1,
             child: Container(
               height: MediaQuery.of(context).size.height * 0.08,
               width: MediaQuery.of(context).size.width * 0.6,
@@ -155,7 +196,7 @@ class _LiveLocationState extends State<LiveLocation> {
                       Icon(Icons.speed),
                       SizedBox(width: MediaQuery.of(context).size.width * 0.05),
                       Text(
-                        "$deviceSpeed Km/h",
+                        deviceSpeed,
                         style: TextStyle(
                             color: Colors.black,
                             fontSize: 14,
@@ -180,7 +221,35 @@ class _LiveLocationState extends State<LiveLocation> {
               ),
             )),
         Positioned(
-            bottom: 10,
+            bottom: 0,
+            child: Container(
+              height: MediaQuery.of(context).size.height * 0.08,
+              width: MediaQuery.of(context).size.width * 1,
+              padding: const EdgeInsets.only(left: 5, right: 5),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.grey.withOpacity(0.3),
+                    offset: const Offset(0, 2),
+                    blurRadius: 3,
+                    spreadRadius: 1,
+                  ),
+                ],
+              ),
+              child: Align(
+                alignment: Alignment.centerLeft,
+                child: Text(
+                  deviceAddress,
+                  style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 16,
+                      fontWeight: FontWeight.w400),
+                ),
+              ),
+            )),
+        Positioned(
+            bottom: MediaQuery.of(context).size.height * 0.1,
             left: 10,
             child: Container(
               height: MediaQuery.of(context).size.height * 0.1,
@@ -327,7 +396,13 @@ class _LiveLocationState extends State<LiveLocation> {
           device_latitude = position[0]['latitude'];
           device_longitude = position[0]['longitude'];
           coordinates = [device_latitude, device_longitude];
-          deviceSpeed = position[0]['speed'].toString();
+          deviceSpeed = "${position[0]['speed'].toString()} Km/h";
+          deviceDistance =
+              "${position[0]['attributes']['distance'].toString()} km";
+          deviceAddress = position[0]['address'].toString();
+          if (deviceAddress == "null") {
+            deviceAddress = "Address not found";
+          }
 
           DateTime dateTime =
               DateTime.parse(position[0]['deviceTime'].toString());
@@ -340,6 +415,8 @@ class _LiveLocationState extends State<LiveLocation> {
         print(coordinates);
         print(deviceSpeed);
         print(deviceTime);
+        print(deviceAddress);
+        print(deviceDistance);
 
         return coordinates;
       } else {

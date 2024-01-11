@@ -44,10 +44,6 @@ class _MyHomePageState extends State<MyHomePage> {
 
   /// API PARAMETERS
   String devicesURL = "https://devfleemooservice.trackafrik.com/api/devices";
-  String positionURL(int id) {
-    return "https://devfleemooservice.trackafrik.com/api/positions?id=$id";
-  }
-
   var usernameAuth = 'admin';
   var passwordAuth = 'AdminFleemoo1234';
   String basicAuth = '';
@@ -55,6 +51,7 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   void initState() {
     print(widget.userName);
+    initialFunction();
     super.initState();
   }
 
@@ -223,8 +220,9 @@ class _MyHomePageState extends State<MyHomePage> {
                                                 fontSize: 16)),
                                         Text(totalDevices,
                                             style: TextStyle(
-                                              color: mainColor,
-                                            ))
+                                                color: mainColor,
+                                                fontSize: 17,
+                                                fontWeight: FontWeight.w700))
                                       ],
                                     )),
                               ),
@@ -611,11 +609,36 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
+  /// INITIAL FUNCTION
+  void initialFunction() async {
+    await getTotalDevices();
+  }
+
   Future<void> logoutUser() async {
     Navigator.pushReplacement(
         context, MaterialPageRoute(builder: ((context) => LoginPage())));
   }
 
   /// TOTAL NUMBER OF DEVICES
-  Future<void> getTotalDevices() async {}
+  Future<void> getTotalDevices() async {
+    int devicesCount = 0;
+    final apiURL = Uri.parse(devicesURL);
+    basicAuth =
+        'Basic ${base64Encode(utf8.encode('$usernameAuth:$passwordAuth'))}';
+
+    try {
+      final response = await http
+          .get(apiURL, headers: <String, String>{'authorization': basicAuth});
+      if (response.statusCode == 200) {
+        List<dynamic> devices = json.decode(response.body);
+        devicesCount = devices.length;
+        setState(() {
+          totalDevices = devicesCount.toString();
+        });
+        print(devicesCount);
+      } else {
+        print(response.body);
+      }
+    } catch (e) {}
+  }
 }
