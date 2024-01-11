@@ -2,7 +2,7 @@ import 'package:flemoo_app/Settings/set_device.dart';
 import 'package:flemoo_app/Settings/sound_setting.dart';
 import 'package:flutter/material.dart';
 
-import '../Location/geofence.dart';
+import '../Location/view_geofence.dart';
 
 class Setting extends StatefulWidget {
   const Setting({super.key});

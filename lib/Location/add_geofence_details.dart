@@ -1,8 +1,8 @@
-// ignore_for_file: avoid_print, use_build_context_synchronously
+// ignore_for_file: avoid_print, use_build_context_synchronously, prefer_const_constructors
 
 import 'dart:convert';
 
-import 'package:flemoo_app/Location/geofence.dart';
+import 'package:flemoo_app/Location/view_geofence.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
@@ -25,6 +25,36 @@ class _AddGeofenceDetailsState extends State<AddGeofenceDetails> {
   /// GEOFENCE DETAILS
   String geofenceName = "";
   String geofenceDescription = "";
+
+  /// GEOFENCE SAVE SUCCESS
+  void geofenceSaveSuccess(BuildContext context) {
+    showDialog(
+        context: context,
+        builder: ((context) {
+          return AlertDialog(
+            backgroundColor: Colors.white,
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(Radius.circular(5))),
+            content: Container(
+              height: MediaQuery.of(context).size.height * 0.2,
+              width: MediaQuery.of(context).size.width * 1,
+              decoration: const BoxDecoration(color: Colors.transparent),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Text("Add Geofence Success"),
+                  Container(
+                      height: MediaQuery.of(context).size.height * 0.1,
+                      width: MediaQuery.of(context).size.width * 0.3,
+                      decoration:
+                          const BoxDecoration(color: Colors.transparent),
+                      child: Image.asset("images/checked.png"))
+                ],
+              ),
+            ),
+          );
+        }));
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -133,19 +163,50 @@ class _AddGeofenceDetailsState extends State<AddGeofenceDetails> {
               ],
             ),
           ),
-          Container(
-            height: MediaQuery.of(context).size.height * 0.05,
-            width: MediaQuery.of(context).size.width * 0.5,
-            decoration: const BoxDecoration(
-              color: Colors.white,
-            ),
-            child: ElevatedButton(
-                onPressed: () {
-                  saveGeofenceDetails(geofenceName, geofenceDescription);
-                },
-                style: ElevatedButton.styleFrom(
-                    backgroundColor: mainColor, foregroundColor: Colors.white),
-                child: Text("DONE")),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              Container(
+                height: MediaQuery.of(context).size.height * 0.05,
+                width: MediaQuery.of(context).size.width * 0.4,
+                decoration: const BoxDecoration(
+                  color: Colors.white,
+                ),
+                child: ElevatedButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    style: ElevatedButton.styleFrom(
+                        backgroundColor: mainColor,
+                        foregroundColor: Colors.white,
+                        shape: const RoundedRectangleBorder(
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(5)))),
+                    child: Text("CANCEL")),
+              ),
+              Container(
+                height: MediaQuery.of(context).size.height * 0.05,
+                width: MediaQuery.of(context).size.width * 0.4,
+                decoration: const BoxDecoration(
+                  color: Colors.white,
+                ),
+                child: ElevatedButton(
+                    onPressed: () {
+                      if (geofenceName.isEmpty || geofenceDescription.isEmpty) {
+                        print("Please input all the details");
+                      } else {
+                        saveGeofenceDetails(geofenceName, geofenceDescription);
+                      }
+                    },
+                    style: ElevatedButton.styleFrom(
+                        backgroundColor: mainColor,
+                        foregroundColor: Colors.white,
+                        shape: const RoundedRectangleBorder(
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(5)))),
+                    child: Text("DONE")),
+              ),
+            ],
           )
         ],
       ),
@@ -175,8 +236,9 @@ class _AddGeofenceDetailsState extends State<AddGeofenceDetails> {
 
       if (response.statusCode == 200) {
         print(response.body);
-        Navigator.push(
-            context, MaterialPageRoute(builder: ((context) => ViewGeofence())));
+        geofenceSaveSuccess(context);
+        /*Navigator.push(
+            context, MaterialPageRoute(builder: ((context) => ViewGeofence())));*/
       } else {
         print(response.statusCode);
       }

@@ -3,7 +3,7 @@
 import 'dart:convert';
 import 'package:flemoo_app/Edit/edit_device.dart';
 import 'package:flemoo_app/Location/add_geofence_details.dart';
-import 'package:flemoo_app/Location/geofence.dart';
+import 'package:flemoo_app/Location/view_geofence.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:http/http.dart' as http;
@@ -11,9 +11,7 @@ import 'package:latlong2/latlong.dart';
 
 class DrawGeofence extends StatefulWidget {
   List coordinates = [];
-  String deviceName = "";
-  DrawGeofence(
-      {super.key, required this.coordinates, required this.deviceName});
+  DrawGeofence({super.key, required this.coordinates});
 
   @override
   State<DrawGeofence> createState() => _DrawGeofenceState();
@@ -194,7 +192,6 @@ class _DrawGeofenceState extends State<DrawGeofence> {
 
   @override
   void initState() {
-    print(widget.deviceName);
     super.initState();
   }
 

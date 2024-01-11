@@ -32,10 +32,10 @@ class _SetGeofence extends State<SetGeofence> {
   var passwordAuth = 'AdminFleemoo1234';
   String basicAuth = '';
 
-  /// DEVICES PARAMETERS
-  List<String> deviceNames = ["Select Device"];
-  String selectedDevice = "Select Device";
-  List<Map<String, dynamic>> allDevices = [];
+  /// GEOFENCES PARAMETERS
+  List<String> geofenceNames = ["Select Geofence"];
+  String selectedGeofence = "Select Geofence";
+  List<Map<String, dynamic>> allGeofences = [];
 
   /// POSITION PARAMETERS
   double device_latitude = 0;
@@ -97,12 +97,12 @@ class _SetGeofence extends State<SetGeofence> {
                   ],
                 ),
                 child: DropdownButton<String>(
-                  value: selectedDevice,
-                  hint: Text("Select Device"),
+                  value: selectedGeofence,
+                  hint: Text("Select Geofence"),
                   iconEnabledColor: Colors.black,
                   iconSize: 50,
                   dropdownColor: Color.fromRGBO(255, 255, 255, 1),
-                  items: deviceNames.map((String value) {
+                  items: geofenceNames.map((String value) {
                     return DropdownMenuItem<String>(
                       value: value,
                       child: Text(
@@ -117,9 +117,8 @@ class _SetGeofence extends State<SetGeofence> {
                   }).toList(),
                   onChanged: (newValue) {
                     setState(() {
-                      selectedDevice = newValue!;
-                      int positionID = getPositionID(selectedDevice);
-                      fetchCoordinates(positionID);
+                      selectedGeofence = newValue!;
+                      print(selectedGeofence);
                     });
                   },
                 ),
@@ -162,24 +161,24 @@ class _SetGeofence extends State<SetGeofence> {
             bottom: 15,
             child: Container(
               height: MediaQuery.of(context).size.height * 0.06,
-              width: MediaQuery.of(context).size.width * 0.5,
+              width: MediaQuery.of(context).size.width * 0.4,
               margin: EdgeInsets.only(
-                  left: MediaQuery.of(context).size.width * 0.25,
-                  right: MediaQuery.of(context).size.width * 0.25),
+                  left: MediaQuery.of(context).size.width * 0.3,
+                  right: MediaQuery.of(context).size.width * 0.3),
               decoration: BoxDecoration(color: Colors.transparent),
               child: ElevatedButton(
                   onPressed: () {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: ((context) => DrawGeofence(
-                                  coordinates: coordinates,
-                                  deviceName: selectedDevice,
-                                ))));
+                            builder: ((context) =>
+                                DrawGeofence(coordinates: coordinates))));
                   },
                   style: ElevatedButton.styleFrom(
                       backgroundColor: mainColor,
-                      foregroundColor: Colors.white),
+                      foregroundColor: Colors.white,
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(5)))),
                   child: Text(
                     "SAVE",
                     style: TextStyle(fontWeight: FontWeight.w400, fontSize: 13),
@@ -231,14 +230,14 @@ class _SetGeofence extends State<SetGeofence> {
 
   /// INITIAL FUNCTION
   void initialAsyncFunctions() async {
-    await fetchDevices();
+    await fetchGeofences();
   }
 
-  ///FETCH DEVICES
-  Future<void> fetchDevices() async {
+  ///FETCH GEOFENCES
+  Future<void> fetchGeofences() async {
     basicAuth =
         'Basic ${base64Encode(utf8.encode('$usernameAuth:$passwordAuth'))}';
-    var url = Uri.parse(devicesURL);
+    var url = Uri.parse(geofenceURL);
 
     try {
       var response = await http.get(
@@ -247,76 +246,29 @@ class _SetGeofence extends State<SetGeofence> {
       );
 
       if (response.statusCode == 200) {
-        List<Map<String, dynamic>> devices = [];
+        List<Map<String, dynamic>> geofences = [];
 
         List<dynamic> jsonData = json.decode(response.body);
-        for (var device in jsonData) {
-          devices.add(Map<String, dynamic>.from(device));
+        for (var geofence in jsonData) {
+          geofences.add(Map<String, dynamic>.from(geofence));
         }
 
         setState(() {
-          allDevices = devices;
+          allGeofences = geofences;
         });
 
-        for (var device in devices) {
+        for (var geofence in geofences) {
           setState(() {
-            deviceNames.add(device["name"]);
+            geofenceNames.add(geofence["name"]);
           });
         }
+
+        print(geofenceNames);
       } else {
         print('Request failed with status: ${response.statusCode}');
       }
     } catch (e) {
       print('Error: $e');
     }
-  }
-
-  /// COORDINATES OF SELECTED DEVICE
-  int getPositionID(String deviceName) {
-    int positionID = 0;
-    for (var device in allDevices) {
-      if (device["name"] == deviceName) {
-        positionID = device["positionId"];
-      }
-    }
-    print(positionID);
-    return positionID;
-  }
-
-  /// FETCH COORDINATES
-  Future<List> fetchCoordinates(int positionID) async {
-    var url = Uri.parse(positionURL(positionID));
-
-    try {
-      var response = await http.get(
-        url,
-        headers: <String, String>{'authorization': basicAuth},
-      );
-
-      if (response.statusCode == 200) {
-        List<dynamic> position = json.decode(response.body);
-
-        setState(() {
-          device_latitude = position[0]['latitude'];
-          device_longitude = position[0]['longitude'];
-          coordinates = [device_latitude, device_longitude];
-        });
-
-        /// Update the initial zoom and center
-        mapController.move(LatLng(coordinates[0], coordinates[1]), 5.0);
-
-        print(coordinates);
-        print(zoomParameter);
-
-        return coordinates;
-      } else {
-        print('Request failed with status: ${response.statusCode}');
-      }
-    } catch (e) {
-      print('Error: $e');
-      return [];
-    }
-
-    return coordinates;
   }
 }
