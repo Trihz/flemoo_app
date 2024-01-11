@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:http/http.dart' as http;
 import 'package:latlong2/latlong.dart';
+import 'package:intl/intl.dart';
 
 class LiveLocation extends StatefulWidget {
   const LiveLocation({super.key});
@@ -34,6 +35,8 @@ class _LiveLocationState extends State<LiveLocation> {
   List<String> deviceNames = ["Select Device"];
   String selectedDevice = "Select Device";
   List<Map<String, dynamic>> allDevices = [];
+  String deviceSpeed = "";
+  String deviceTime = "";
 
   /// POSITION PARAMETERS
   double device_latitude = 0;
@@ -121,6 +124,59 @@ class _LiveLocationState extends State<LiveLocation> {
                     });
                   },
                 ),
+              ),
+            )),
+        Positioned(
+            bottom: 20,
+            child: Container(
+              height: MediaQuery.of(context).size.height * 0.08,
+              width: MediaQuery.of(context).size.width * 0.6,
+              margin: EdgeInsets.only(
+                  left: MediaQuery.of(context).size.width * 0.2,
+                  right: MediaQuery.of(context).size.width * 0.2),
+              padding: EdgeInsets.only(left: 10, right: 10),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.all(Radius.circular(10)),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.grey.withOpacity(0.3),
+                    offset: const Offset(0, 2),
+                    blurRadius: 3,
+                    spreadRadius: 1,
+                  ),
+                ],
+              ),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Row(
+                    children: [
+                      Icon(Icons.speed),
+                      SizedBox(width: MediaQuery.of(context).size.width * 0.05),
+                      Text(
+                        "$deviceSpeed Km/h",
+                        style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 14,
+                            fontWeight: FontWeight.w700),
+                      )
+                    ],
+                  ),
+                  Row(
+                    children: [
+                      Icon(Icons.punch_clock),
+                      SizedBox(width: MediaQuery.of(context).size.width * 0.05),
+                      Text(
+                        deviceTime,
+                        style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 14,
+                            fontWeight: FontWeight.w700),
+                      )
+                    ],
+                  )
+                ],
               ),
             )),
         Positioned(
@@ -271,13 +327,19 @@ class _LiveLocationState extends State<LiveLocation> {
           device_latitude = position[0]['latitude'];
           device_longitude = position[0]['longitude'];
           coordinates = [device_latitude, device_longitude];
+          deviceSpeed = position[0]['speed'].toString();
+
+          DateTime dateTime =
+              DateTime.parse(position[0]['deviceTime'].toString());
+          deviceTime = DateFormat.yMd().add_Hms().format(dateTime);
         });
 
         /// Update the initial zoom and center
         mapController.move(LatLng(coordinates[0], coordinates[1]), 5.0);
 
         print(coordinates);
-        print(zoomParameter);
+        print(deviceSpeed);
+        print(deviceTime);
 
         return coordinates;
       } else {

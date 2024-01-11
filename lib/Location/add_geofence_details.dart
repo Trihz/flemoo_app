@@ -176,7 +176,7 @@ class _AddGeofenceDetailsState extends State<AddGeofenceDetails> {
       if (response.statusCode == 200) {
         print(response.body);
         Navigator.push(
-            context, MaterialPageRoute(builder: ((context) => Geofence())));
+            context, MaterialPageRoute(builder: ((context) => ViewGeofence())));
       } else {
         print(response.statusCode);
       }

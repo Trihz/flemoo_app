@@ -6,12 +6,12 @@ import 'package:flemoo_app/Location/set_geofence.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
-class Geofence extends StatefulWidget {
+class ViewGeofence extends StatefulWidget {
   @override
-  State<Geofence> createState() => _GeofenceState();
+  State<ViewGeofence> createState() => _GeofenceState();
 }
 
-class _GeofenceState extends State<Geofence> {
+class _GeofenceState extends State<ViewGeofence> {
   /// MAIN COLORS
   Color mainColor = Colors.blue;
 
@@ -48,43 +48,42 @@ class _GeofenceState extends State<Geofence> {
             return ListView.builder(
               itemCount: geofencesData?.length,
               itemBuilder: (context, index) {
-                return Container(
-                  width: MediaQuery.of(context).size.width * 1,
-                  margin: const EdgeInsets.only(bottom: 10),
-                  padding: const EdgeInsets.only(
-                      top: 5, bottom: 5, left: 20, right: 20),
-                  decoration: BoxDecoration(color: Colors.white),
-                  child: Column(
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            geofencesData?[index]['name'],
-                            style: TextStyle(
-                                fontWeight: FontWeight.w600, fontSize: 15),
-                          ),
-                          GestureDetector(
-                            onTap: (() {
-                              confirmDelete(
-                                  context, geofencesData?[index]['id']);
-                            }),
-                            child: Icon(
+                return GestureDetector(
+                  onTap: () {
+                    geofenceActions(context, geofencesData?[index]['id']);
+                  },
+                  child: Container(
+                    width: MediaQuery.of(context).size.width * 1,
+                    margin: const EdgeInsets.only(bottom: 10),
+                    padding: const EdgeInsets.only(
+                        top: 5, bottom: 5, left: 20, right: 20),
+                    decoration: BoxDecoration(color: Colors.white),
+                    child: Column(
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              geofencesData?[index]['name'],
+                              style: TextStyle(
+                                  fontWeight: FontWeight.w600, fontSize: 15),
+                            ),
+                            Icon(
                               Icons.delete,
                               color: mainColor,
-                            ),
-                          )
-                        ],
-                      ),
-                      Align(
-                          alignment: Alignment.centerLeft,
-                          child: Text(
-                            geofencesData?[index]['description'],
-                            style: TextStyle(
-                                fontWeight: FontWeight.w300, fontSize: 13),
-                          )),
-                      Divider(),
-                    ],
+                            )
+                          ],
+                        ),
+                        Align(
+                            alignment: Alignment.centerLeft,
+                            child: Text(
+                              geofencesData?[index]['description'],
+                              style: TextStyle(
+                                  fontWeight: FontWeight.w300, fontSize: 13),
+                            )),
+                        Divider(),
+                      ],
+                    ),
                   ),
                 );
               },
@@ -120,6 +119,70 @@ class _GeofenceState extends State<Geofence> {
                         child: Text("CONFIRM"))),
               ),
             )));
+  }
+
+  /// GEOFENCE ACTIONS
+  void geofenceActions(BuildContext context, int geofenceID) {
+    showDialog(
+        context: context,
+        builder: ((context) {
+          return AlertDialog(
+              backgroundColor: Colors.white,
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(5))),
+              title: Text(
+                "Select Action",
+                style: TextStyle(
+                    color: Colors.black,
+                    fontWeight: FontWeight.w600,
+                    fontSize: 20),
+              ),
+              content: Container(
+                height: MediaQuery.of(context).size.height * 0.2,
+                width: MediaQuery.of(context).size.width * 0.6,
+                decoration: BoxDecoration(color: Colors.transparent),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        "Edit",
+                        style: TextStyle(
+                            color: Colors.black,
+                            fontWeight: FontWeight.w400,
+                            fontSize: 18),
+                      ),
+                    ),
+                    GestureDetector(
+                      onTap: () {
+                        deleteGeofence(geofenceID);
+                      },
+                      child: Align(
+                        alignment: Alignment.centerLeft,
+                        child: Text(
+                          "Delete",
+                          style: TextStyle(
+                              color: Colors.black,
+                              fontWeight: FontWeight.w400,
+                              fontSize: 18),
+                        ),
+                      ),
+                    ),
+                    Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        "Non Active",
+                        style: TextStyle(
+                            color: Colors.black,
+                            fontWeight: FontWeight.w400,
+                            fontSize: 18),
+                      ),
+                    ),
+                  ],
+                ),
+              ));
+        }));
   }
 
   @override
@@ -237,7 +300,7 @@ class _GeofenceState extends State<Geofence> {
       if (response.statusCode == 204) {
         print("Geofence deleted successfully");
         Navigator.push(
-            context, MaterialPageRoute(builder: ((context) => Geofence())));
+            context, MaterialPageRoute(builder: ((context) => ViewGeofence())));
       } else {
         print("Error deleting the geofence");
         Navigator.pop(context);

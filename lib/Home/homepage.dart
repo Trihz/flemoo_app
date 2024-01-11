@@ -39,6 +39,19 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   Color mainColor = Colors.blue;
 
+  /// TOTAL DEVICES
+  String totalDevices = "";
+
+  /// API PARAMETERS
+  String devicesURL = "https://devfleemooservice.trackafrik.com/api/devices";
+  String positionURL(int id) {
+    return "https://devfleemooservice.trackafrik.com/api/positions?id=$id";
+  }
+
+  var usernameAuth = 'admin';
+  var passwordAuth = 'AdminFleemoo1234';
+  String basicAuth = '';
+
   @override
   void initState() {
     print(widget.userName);
@@ -183,21 +196,39 @@ class _MyHomePageState extends State<MyHomePage> {
                               width: 20,
                             ),
                             Container(
-                                height: 30,
-                                decoration: BoxDecoration(),
-                                child: OutlinedButton(
-                                    style: ButtonStyle(
-                                      side:
-                                          MaterialStateProperty.all<BorderSide>(
-                                        BorderSide(
-                                            color: mainColor, width: 2.0),
-                                      ),
-                                    ),
-                                    onPressed: () {},
-                                    child: Text(
-                                      '35q492998447',
-                                      style: TextStyle(color: mainColor),
-                                    ))),
+                              height:
+                                  MediaQuery.of(context).size.height * 0.055,
+                              width: MediaQuery.of(context).size.width * 0.51,
+                              decoration: BoxDecoration(
+                                  color: mainColor,
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(20))),
+                              child: Center(
+                                child: Container(
+                                    height: MediaQuery.of(context).size.height *
+                                        0.05,
+                                    width:
+                                        MediaQuery.of(context).size.width * 0.5,
+                                    decoration: BoxDecoration(
+                                        color: Colors.white,
+                                        borderRadius: BorderRadius.all(
+                                            Radius.circular(20))),
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceEvenly,
+                                      children: [
+                                        Text('Total Devices:',
+                                            style: TextStyle(
+                                                color: mainColor,
+                                                fontSize: 16)),
+                                        Text(totalDevices,
+                                            style: TextStyle(
+                                              color: mainColor,
+                                            ))
+                                      ],
+                                    )),
+                              ),
+                            ),
                           ],
                         )
                       ],
@@ -403,7 +434,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     onTap: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => Geofence()),
+                        MaterialPageRoute(builder: (context) => ViewGeofence()),
                       );
                     },
                     child: Container(
@@ -584,4 +615,7 @@ class _MyHomePageState extends State<MyHomePage> {
     Navigator.pushReplacement(
         context, MaterialPageRoute(builder: ((context) => LoginPage())));
   }
+
+  /// TOTAL NUMBER OF DEVICES
+  Future<void> getTotalDevices() async {}
 }

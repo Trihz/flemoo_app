@@ -80,7 +80,7 @@ class _Setting extends State<Setting> {
             onTap: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => Geofence()),
+                MaterialPageRoute(builder: (context) => ViewGeofence()),
               );
             },
             child: Row(
