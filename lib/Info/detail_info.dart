@@ -10,9 +10,10 @@ class DetailInfo extends StatefulWidget {
 }
 
 class _DetailInfo extends State<DetailInfo> {
+  Color mainColor = Colors.blue;
+
   @override
   Widget build(BuildContext context) {
-    final ThemeData theme = Theme.of(context);
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
@@ -25,7 +26,7 @@ class _DetailInfo extends State<DetailInfo> {
         ),
         title: Center(child: Text('DETAIL INFO')),
         foregroundColor: Colors.white,
-        backgroundColor: theme.primaryColor,
+        backgroundColor: mainColor,
       ),
       body: SingleChildScrollView(
         child: Padding(
@@ -51,7 +52,7 @@ class _DetailInfo extends State<DetailInfo> {
                   children: [
                     Icon(
                       Icons.directions_car,
-                      color: theme.primaryColor,
+                      color: mainColor,
                     ),
                     SizedBox(
                       width: 5,
@@ -99,7 +100,7 @@ class _DetailInfo extends State<DetailInfo> {
                   child: Text(
                     'Call',
                     style: TextStyle(
-                      color: theme.primaryColor,
+                      color: mainColor,
                       fontWeight: FontWeight.bold,
                     ),
                   ),

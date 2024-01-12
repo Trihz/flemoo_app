@@ -237,8 +237,10 @@ class _AddGeofenceDetailsState extends State<AddGeofenceDetails> {
       if (response.statusCode == 200) {
         print(response.body);
         geofenceSaveSuccess(context);
-        /*Navigator.push(
-            context, MaterialPageRoute(builder: ((context) => ViewGeofence())));*/
+        Future.delayed(Duration(seconds: 3), () {
+          Navigator.push(context,
+              MaterialPageRoute(builder: ((context) => ViewGeofence())));
+        });
       } else {
         print(response.statusCode);
       }

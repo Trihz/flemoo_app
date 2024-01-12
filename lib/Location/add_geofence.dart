@@ -42,7 +42,7 @@ class _DrawGeofenceState extends State<DrawGeofence> {
               options: MapOptions(
                 initialCenter:
                     LatLng(widget.coordinates[0], widget.coordinates[1]),
-                initialZoom: 15,
+                initialZoom: 3,
               ),
               children: [
                 TileLayer(
@@ -148,31 +148,27 @@ class _DrawGeofenceState extends State<DrawGeofence> {
             bottom: 15,
             child: Container(
               height: MediaQuery.of(context).size.height * 0.06,
-              width: MediaQuery.of(context).size.width * 0.5,
+              width: MediaQuery.of(context).size.width * 0.4,
               margin: EdgeInsets.only(
-                  left: MediaQuery.of(context).size.width * 0.25,
-                  right: MediaQuery.of(context).size.width * 0.25),
+                  left: MediaQuery.of(context).size.width * 0.3,
+                  right: MediaQuery.of(context).size.width * 0.3),
               decoration: BoxDecoration(color: Colors.transparent),
-              child: Container(
-                height: MediaQuery.of(context).size.height * 0.05,
-                width: MediaQuery.of(context).size.width * 0.3,
-                decoration: BoxDecoration(color: Colors.transparent),
-                child: ElevatedButton(
-                    onPressed: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: ((context) => AddGeofenceDetails())));
-                    },
-                    style: ElevatedButton.styleFrom(
-                        backgroundColor: mainColor,
-                        foregroundColor: Colors.white),
-                    child: Text(
-                      "SAVE",
-                      style:
-                          TextStyle(fontWeight: FontWeight.w400, fontSize: 13),
-                    )),
-              ),
+              child: ElevatedButton(
+                  onPressed: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: ((context) => AddGeofenceDetails())));
+                  },
+                  style: ElevatedButton.styleFrom(
+                      backgroundColor: mainColor,
+                      foregroundColor: Colors.white,
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(5)))),
+                  child: Text(
+                    "SAVE",
+                    style: TextStyle(fontWeight: FontWeight.w400, fontSize: 13),
+                  )),
             ))
       ],
     );

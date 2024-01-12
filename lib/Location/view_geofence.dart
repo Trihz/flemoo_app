@@ -68,10 +68,6 @@ class _GeofenceState extends State<ViewGeofence> {
                               style: TextStyle(
                                   fontWeight: FontWeight.w600, fontSize: 15),
                             ),
-                            Icon(
-                              Icons.delete,
-                              color: mainColor,
-                            )
                           ],
                         ),
                         Align(
@@ -130,12 +126,14 @@ class _GeofenceState extends State<ViewGeofence> {
               backgroundColor: Colors.white,
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.all(Radius.circular(5))),
-              title: Text(
-                "Select Action",
-                style: TextStyle(
-                    color: Colors.black,
-                    fontWeight: FontWeight.w600,
-                    fontSize: 20),
+              title: Center(
+                child: Text(
+                  "Select Action",
+                  style: TextStyle(
+                      color: Colors.black,
+                      fontWeight: FontWeight.w600,
+                      fontSize: 20),
+                ),
               ),
               content: Container(
                 height: MediaQuery.of(context).size.height * 0.2,
@@ -144,39 +142,63 @@ class _GeofenceState extends State<ViewGeofence> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                    Align(
-                      alignment: Alignment.centerLeft,
-                      child: Text(
-                        "Edit",
-                        style: TextStyle(
-                            color: Colors.black,
-                            fontWeight: FontWeight.w400,
-                            fontSize: 18),
-                      ),
-                    ),
-                    GestureDetector(
-                      onTap: () {
-                        deleteGeofence(geofenceID);
-                      },
-                      child: Align(
-                        alignment: Alignment.centerLeft,
+                    SizedBox(
+                      width: MediaQuery.of(context).size.width * 0.4,
+                      child: ElevatedButton(
+                        onPressed: () {},
+                        style: ElevatedButton.styleFrom(
+                            backgroundColor: mainColor,
+                            foregroundColor: Colors.white,
+                            shape: const RoundedRectangleBorder(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(5)))),
                         child: Text(
-                          "Delete",
+                          "Edit",
                           style: TextStyle(
-                              color: Colors.black,
+                              color: Colors.white,
                               fontWeight: FontWeight.w400,
                               fontSize: 18),
                         ),
                       ),
                     ),
-                    Align(
-                      alignment: Alignment.centerLeft,
-                      child: Text(
-                        "Non Active",
-                        style: TextStyle(
-                            color: Colors.black,
-                            fontWeight: FontWeight.w400,
-                            fontSize: 18),
+                    SizedBox(
+                      width: MediaQuery.of(context).size.width * 0.4,
+                      child: ElevatedButton(
+                        onPressed: () {
+                          deleteGeofence(geofenceID);
+                        },
+                        style: ElevatedButton.styleFrom(
+                            backgroundColor: mainColor,
+                            foregroundColor: Colors.white,
+                            shape: const RoundedRectangleBorder(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(5)))),
+                        child: Text(
+                          "Delete",
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.w400,
+                              fontSize: 18),
+                        ),
+                      ),
+                    ),
+                    SizedBox(
+                      width: MediaQuery.of(context).size.width * 0.4,
+                      child: ElevatedButton(
+                        onPressed: () {},
+                        style: ElevatedButton.styleFrom(
+                            backgroundColor: mainColor,
+                            foregroundColor: Colors.white,
+                            shape: const RoundedRectangleBorder(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(5)))),
+                        child: Text(
+                          "Non Active",
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.w400,
+                              fontSize: 18),
+                        ),
                       ),
                     ),
                   ],
