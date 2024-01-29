@@ -69,9 +69,7 @@ class _HistoryGps extends State<HistoryGps> {
                 labelText: 'Select Type',
                 suffixIcon: IconButton(
                   icon: const Icon(Icons.arrow_drop_down),
-                  onPressed: () {
-                    // Handle icon button press
-                  },
+                  onPressed: () {},
                 ),
               ),
             ),
@@ -87,7 +85,10 @@ class _HistoryGps extends State<HistoryGps> {
                           MaterialStateProperty.all<Color>(Colors.blue),
                       foregroundColor:
                           MaterialStateProperty.all<Color>(Colors.white)),
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: ((context) => History())));
+                  },
                   child: const Text('SEARCH')),
             ),
           ]),

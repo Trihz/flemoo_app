@@ -6,10 +6,10 @@ class History extends StatefulWidget {
 }
 
 class _History extends State<History> {
+  Color mainColor = Colors.blue;
+
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
-    final ThemeData theme = Theme.of(context);
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
@@ -18,10 +18,10 @@ class _History extends State<History> {
               context,
             );
           },
-          icon: Icon(Icons.arrow_back),
+          icon: const Icon(Icons.arrow_back),
         ),
-        title: Center(child: Text('HISTORY')),
-        backgroundColor: theme.primaryColor,
+        title: const Center(child: Text('HISTORY')),
+        backgroundColor: mainColor,
         foregroundColor: Colors.white,
       ),
     );
