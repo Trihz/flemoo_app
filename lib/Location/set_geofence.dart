@@ -28,12 +28,13 @@ class _SetGeofence extends State<SetGeofence> {
     return "https://devfleemooservice.trackafrik.com/api/positions?id=$id";
   }
 
+  /// AUTHENTICATION PARAMETERS
   var usernameAuth = 'admin';
   var passwordAuth = 'AdminFleemoo1234';
   String basicAuth = '';
 
   /// GEOFENCES PARAMETERS
-  List<String> geofenceNames = ["Select Geofence"];
+  List<String> geofenceNames = ["Select Device"];
   String selectedGeofence = "Select Geofence";
   List<Map<String, dynamic>> allGeofences = [];
 
