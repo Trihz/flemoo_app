@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, avoid_print, must_be_immutable
+// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, avoid_print, must_be_immutable, sized_box_for_whitespace, use_build_context_synchronously
 
 import 'dart:convert';
 
@@ -658,7 +658,9 @@ class _MyHomePageState extends State<MyHomePage> {
                           width: MediaQuery.of(context).size.width * 0.3,
                           decoration: const BoxDecoration(),
                           child: ElevatedButton(
-                              onPressed: () {},
+                              onPressed: () {
+                                cutoffDevice();
+                              },
                               style: ElevatedButton.styleFrom(
                                   backgroundColor: mainColor,
                                   foregroundColor: Colors.white,
@@ -672,7 +674,9 @@ class _MyHomePageState extends State<MyHomePage> {
                           width: MediaQuery.of(context).size.width * 0.3,
                           decoration: const BoxDecoration(),
                           child: ElevatedButton(
-                              onPressed: () {},
+                              onPressed: () {
+                                Navigator.pop(context);
+                              },
                               style: ElevatedButton.styleFrom(
                                   backgroundColor: mainColor,
                                   foregroundColor: Colors.white,
@@ -723,7 +727,9 @@ class _MyHomePageState extends State<MyHomePage> {
                           width: MediaQuery.of(context).size.width * 0.3,
                           decoration: const BoxDecoration(),
                           child: ElevatedButton(
-                              onPressed: () {},
+                              onPressed: () {
+                                restartDevice();
+                              },
                               style: ElevatedButton.styleFrom(
                                   backgroundColor: mainColor,
                                   foregroundColor: Colors.white,
@@ -737,7 +743,9 @@ class _MyHomePageState extends State<MyHomePage> {
                           width: MediaQuery.of(context).size.width * 0.3,
                           decoration: const BoxDecoration(),
                           child: ElevatedButton(
-                              onPressed: () {},
+                              onPressed: () {
+                                Navigator.pop(context);
+                              },
                               style: ElevatedButton.styleFrom(
                                   backgroundColor: mainColor,
                                   foregroundColor: Colors.white,
@@ -816,5 +824,65 @@ class _MyHomePageState extends State<MyHomePage> {
     } catch (e) {}
   }
 
-  Future<void> restartDevice() async {}
+  /// RESTART THE DEVICE
+  Future<void> restartDevice() async {
+    final apiURL = Uri.parse(commandsURL);
+    basicAuth =
+        'Basic ${base64Encode(utf8.encode('$usernameAuth:$passwordAuth'))}';
+    try {
+      final response = await http.post(apiURL,
+          headers: <String, String>{
+            'authorization': basicAuth,
+            'content-type': 'application/json'
+          },
+          body: toJSON({
+            'description': "Restarted the device",
+            'type': 'rebootDevice',
+            'attributes': {}
+          }));
+
+      if (response.statusCode == 200) {
+        print(response.body);
+        Navigator.pop(context);
+      } else {
+        print(response.statusCode);
+        print(response.body);
+      }
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  /// CUT OFF THE DEVICE
+  Future<void> cutoffDevice() async {
+    final apiURL = Uri.parse(commandsURL);
+    basicAuth =
+        'Basic ${base64Encode(utf8.encode('$usernameAuth:$passwordAuth'))}';
+    try {
+      final response = await http.post(apiURL,
+          headers: <String, String>{
+            'authorization': basicAuth,
+            'content-type': 'application/json',
+          },
+          body: toJSON({
+            'description': "Cut off the device",
+            'type': 'powerOff',
+            'attributes': {}
+          }));
+      if (response.statusCode == 200) {
+        print(response.body);
+        Navigator.pop(context);
+      } else {
+        print(response.statusCode);
+        print(response.body);
+      }
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  /// TO JSON
+  String toJSON(Object data) {
+    return jsonEncode(data);
+  }
 }
